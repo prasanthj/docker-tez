@@ -1,4 +1,4 @@
-FROM prasanthj/hadoop-2.5.0
+FROM prasanthj/docker-hadoop
 MAINTAINER Prasanth Jayachandran
 
 # download, extract and copy tez binaries

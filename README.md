@@ -3,6 +3,10 @@ Docker image for Apache Tez
 
 This repository contains a docker file to build a docker image with Apache Tez. This docker file is adaptation from [this] repo, except that the docker image for tez runs on top of hadoop 2.5.0 docker base image from my other github repo ([docker-hadoop]).
 
+## Current Version
+* Apache Tez 0.5.0
+* Apache Hadoop 2.5.0
+
 ## Running on Mac OS X
 
 This step is required only for Mac OS X as docker is not natively supported in Mac OS X. To run docker on Mac OS X we need Boot2Docker.
@@ -36,10 +40,6 @@ docker --tls build  -t prasanthj/tez-0.5.0 .
 ```
 docker --tls run -i -t -P prasanthj/tez-0.5.0 /etc/bootstrap.sh -bash
 ```
-
-## Versions
-* Apache Hadoop 2.5.0
-* Apache Tez 0.5.0
 
 ## Testing
 When running one of the stock map-reduce examples, the TEZ DAG ApplicationMaster will run the map-reduce job instead of the YARN MR AppMaster.
