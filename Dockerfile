@@ -1,18 +1,31 @@
 FROM prasanthj/docker-hadoop
 MAINTAINER Prasanth Jayachandran
 
-# download, extract and copy tez binaries
-RUN curl -s https://s3-eu-west-1.amazonaws.com/seq-tez/tez-0.5.0.tar.gz | tar -xz -C /usr/local/
-RUN cd /usr/local && ln -s tez-0.5.0 tez
-RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put /usr/local/tez-0.5.0 /tez
+# dev tools to build tez
+RUN apt-get update
+RUN apt-get install -y git libprotobuf-dev protobuf-compiler
+
+# install maven
+RUN curl -s http://mirror.olnevhost.net/pub/apache/maven/binaries/apache-maven-3.2.1-bin.tar.gz | tar -xz -C /usr/local/
+RUN cd /usr/local && ln -s apache-maven-3.2.1 maven
+ENV MAVEN_HOME /usr/local/maven
+ENV PATH $MAVEN_HOME/bin:$PATH
+
+# download tez code, swith to 0.5 branch, compile and copy jars
+ENV TEZ_VERSION 0.5.2-SNAPSHOT
+ENV TEZ_DIST /usr/local/tez/tez-dist/target/tez-${TEZ_VERSION}
+RUN cd /usr/local && git clone https://github.com/apache/tez.git
+RUN cd /usr/local/tez && git checkout -b branch-0.5 origin/branch-0.5
+RUN cd /usr/local/tez && mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true
+RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put ${TEZ_DIST} /tez
 
 # add tez specific configs
 ADD tez-site.xml $HADOOP_PREFIX/etc/hadoop/tez-site.xml
 ADD mapred-site.xml $HADOOP_PREFIX/etc/hadoop/mapred-site.xml
 
 # environment settings
-RUN echo 'TEZ_JARS=/usr/local/tez/*' >> $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
-RUN echo 'TEZ_LIB=/usr/local/tez/lib/*' >> $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
+RUN echo 'TEZ_JARS=${TEZ_DIST}/*' >> $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
+RUN echo 'TEZ_LIB=${TEZ_DIST}/lib/*' >> $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 RUN echo 'TEZ_CONF=/usr/local/hadoop/etc/hadoop' >> $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 RUN echo 'export HADOOP_CLASSPATH=$HADOOP_CLASSPATH:$TEZ_CONF:$TEZ_JARS:$TEZ_LIB' >> $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh
 
