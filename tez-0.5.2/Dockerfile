@@ -11,10 +11,10 @@ RUN cd /usr/local && ln -s apache-maven-3.2.1 maven
 ENV MAVEN_HOME /usr/local/maven
 ENV PATH $MAVEN_HOME/bin:$PATH
 
-# download tez code, swith to 0.5 branch, compile and copy jars
-ENV TEZ_VERSION 0.6.0-SNAPSHOT
+# download tez code, switch to 0.5 branch, compile and copy jars
+ENV TEZ_VERSION 0.5.2
 ENV TEZ_DIST /usr/local/tez/tez-dist/target/tez-${TEZ_VERSION}
-RUN cd /usr/local && git clone https://github.com/apache/tez.git
+RUN cd /usr/local && git clone https://github.com/apache/tez.git -b branch-0.5.2
 RUN cd /usr/local/tez && mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true
 RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put ${TEZ_DIST} /tez
 

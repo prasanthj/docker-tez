@@ -4,7 +4,7 @@ Docker image for Apache Tez
 This repository contains a docker file to build a docker image with Apache Tez. This docker file is adaptation from [this] repo, except that the docker image for tez runs on top of hadoop 2.5.0 docker base image from my other github repo ([docker-hadoop]).
 
 ## Current Version
-* Apache Tez 0.5.2-SNAPSHOT
+* Apache Tez 0.6.0-SNAPSHOT
 * Apache Hadoop 2.5.0
 
 ## Running on Mac OS X
@@ -23,7 +23,7 @@ This step is required only for Mac OS X as docker is not natively supported in M
 ## Pull the image
 You can either pull the image that is already pre-built from Docker hub or build the image locally (refer next section)
 ```
-docker --tls pull prasanthj/tez-0.5.2-SNAPSHOT
+docker --tls pull prasanthj/tez-0.6.0-SNAPSHOT
 ```
 
 ## Building the image
@@ -33,12 +33,12 @@ If you do not want to pull the image from Docker hub, you can build it locally u
 `git clone https://github.com/prasanthj/docker-tez.git`
 * Change to docker-tez directory `cd docker-tez`
 ```
-docker --tls build  -t prasanthj/tez-0.5.2-SNAPSHOT .
+docker --tls build  -t prasanthj/tez-0.6.0-SNAPSHOT .
 ```
 
 ## Running the image
 ```
-docker --tls run -i -t -P prasanthj/tez-0.5.2-SNAPSHOT /etc/bootstrap.sh -bash
+docker --tls run -i -t -P prasanthj/tez-0.6.0-SNAPSHOT /etc/bootstrap.sh -bash
 ```
 
 ## Testing
@@ -50,7 +50,7 @@ $HADOOP_PREFIX/bin/hadoop jar $HADOOP_PREFIX/share/hadoop/mapreduce/hadoop-mapre
 
 There is also a basic Tez MRR job example in one of the tez jars. You can test it by running the following:
 ```
-$HADOOP_PREFIX/bin/hadoop jar $TEZ_DIST/tez-examples-0.5.2-SNAPSHOT.jar orderedwordcount input output-owc
+$HADOOP_PREFIX/bin/hadoop jar $TEZ_DIST/tez-examples-0.6.0-SNAPSHOT.jar orderedwordcount input output-owc
 ```
 
 ## Viewing Web UI
