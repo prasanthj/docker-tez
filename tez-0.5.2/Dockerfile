@@ -16,7 +16,7 @@ ENV TEZ_VERSION 0.5.2
 ENV TEZ_DIST /usr/local/tez/tez-dist/target/tez-${TEZ_VERSION}
 RUN cd /usr/local && git clone https://github.com/apache/tez.git -b branch-0.5.2
 RUN cd /usr/local/tez && mvn clean package -DskipTests=true -Dmaven.javadoc.skip=true
-RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put ${TEZ_DIST}/*.jar /tez
+RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -mkdir /tez && $HADOOP_PREFIX/bin/hdfs dfs -put ${TEZ_DIST}/*.jar /tez
 
 # add tez specific configs
 ADD tez-site.xml $HADOOP_PREFIX/etc/hadoop/tez-site.xml
