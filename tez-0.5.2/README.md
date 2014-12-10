@@ -1,11 +1,11 @@
 Docker image for Apache Tez
 ===========================
 
-This repository contains a docker file to build a docker image with Apache Tez. This docker file is adaptation from [this] repo, except that the docker image for tez runs on top of hadoop 2.5.0 docker base image from my other github repo ([docker-hadoop]).
+This repository contains a docker file to build a docker image with Apache Tez. This docker file is adaptation from [this] repo, except that the docker image for tez runs on top of hadoop 2.5.2 docker base image from my other github repo ([docker-hadoop]).
 
 ## Version
 * Apache Tez 0.5.2
-* Apache Hadoop 2.5.0
+* Apache Hadoop 2.5.2
 
 ## Running on Mac OS X
 
@@ -23,7 +23,7 @@ This step is required only for Mac OS X as docker is not natively supported in M
 ## Pull the image
 You can either pull the image that is already pre-built from Docker hub or build the image locally (refer next section)
 ```
-docker --tls pull prasanthj/tez-0.5.2
+docker --tls pull prasanthj/docker-tez:tez-0.5.2
 ```
 
 ## Building the image
@@ -33,19 +33,19 @@ If you do not want to pull the image from Docker hub, you can build it locally u
 `git clone https://github.com/prasanthj/docker-tez.git`
 * Change to docker-tez directory `cd docker-tez`
 ```
-docker --tls build  -t prasanthj/tez-0.5.2 .
+docker --tls build  -t local-tez-0.5.2 .
 ```
 
 ## Running the image
 ```
-docker --tls run -i -t -P prasanthj/tez-0.5.2 /etc/bootstrap.sh -bash
+docker --tls run -i -t -P local-tez-0.5.2 /etc/bootstrap.sh -bash
 ```
 
 ## Testing
 When running one of the stock map-reduce examples, the TEZ DAG ApplicationMaster will run the map-reduce job instead of the YARN MR AppMaster.
 This can be verified by looking at the YARN ResourceManager UI.
 ```
-$HADOOP_PREFIX/bin/hadoop jar $HADOOP_PREFIX/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.5.0.jar grep input output 'dfs[a-z.]+'
+$HADOOP_PREFIX/bin/hadoop jar $HADOOP_PREFIX/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.5.2.jar grep input output 'dfs[a-z.]+'
 ```
 
 There is also a basic Tez MRR job example in one of the tez jars. You can test it by running the following:
@@ -63,7 +63,7 @@ _NOTE_: 172.17.0.X is usually the ipaddress of docker container. 192.168.59.103 
  * Get containers IP address
 	* To get containers IP address we need CONTAINER_ID. To get container id use the following command which should list all running containers and its ID
 	`docker --tls ps`
-	* Use the following command to get containers IP address (where CONTAINER_ID is the container id of prasanthj/hive-on-tez image)
+	* Use the following command to get containers IP address (where CONTAINER_ID is the container id of local-tez-0.5.2 image)
 	`docker --tls inspect -f=“{{.NetworkSettings.IPAddress}}” CONTAINER_ID`
 
  * Launch a web browser and type `http://<container-ip-address>:8088` to view hadoop cluster web UI.
