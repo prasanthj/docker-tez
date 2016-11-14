@@ -22,7 +22,8 @@ RUN cd /usr/local/tez && git checkout tags/rel/release-0.8.4 -b branch-0.8 && mv
 RUN $BOOTSTRAP && $HADOOP_PREFIX/bin/hadoop dfsadmin -safemode leave && $HADOOP_PREFIX/bin/hdfs dfs -put ${TEZ_DIST} /tez
 
 # prepare tez ui
-RUN mkdir /var/www/html/tez-ui && cd /var/www/html/tez-ui && jar -xvf ${TEZ_DIST}/tez-ui2-${TEZ_VERSION}.war
+RUN mkdir /var/www/tez-ui && cd /var/www/tez-ui && jar -xvf ${TEZ_DIST}/tez-ui2-${TEZ_VERSION}.war
+RUN service apache2 restart
 
 # add site files
 ADD tez-site.xml $HADOOP_PREFIX/etc/hadoop/tez-site.xml
