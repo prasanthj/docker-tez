@@ -3,7 +3,10 @@ MAINTAINER Prasanth Jayachandran
 
 # dev tools to build tez
 RUN apt-get update
-RUN apt-get install -y git libprotobuf-dev protobuf-compiler
+RUN apt-get install -y git libprotobuf-dev protobuf-compiler npm
+
+# to run bower as root
+RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
 # install maven
 RUN curl -s http://mirror.olnevhost.net/pub/apache/maven/binaries/apache-maven-3.2.1-bin.tar.gz | tar -xz -C /usr/local/
